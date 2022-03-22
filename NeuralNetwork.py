@@ -131,10 +131,10 @@ class Modifiable_NN(object):
                 self.update_param(grad_w,grad_b,layer_num, lr = lr)
             if iter% (epoch/10) ==0:
                 print('\n COST:::',Dropout().cost(X,Y),end=' ')    
-                self.score(X,Y)
+                self.evaluate(X,Y)
                                                                                                                                                
         if X_test is not None:
-            self.score(X_test,Y_test)
+            self.evaluate(X_test,Y_test)
 
         #Saving parameters dictionary to file 
         a_file = open("parameters.pkl", "wb")
@@ -154,14 +154,14 @@ class Modifiable_NN(object):
 
     #If test datasets are given, during training we will score NN on train set and once training is completed 
     #It measures score of NN on test set and gives final accuracy
-    def score(self,X,Y):
+    def evaluate(self,X,Y):
         Y_hat = self.feed_forward(X)
-        #just for Relu function
+        Y_hat = self.decide(Y_hat)
         count =  0
         for i in range(Y.shape[1]):
-            if Y[0][i]*0.9<  Y_hat[0][i]  < Y[0][i]*1.1  :
+            if Y_hat[0][i] ==  Y[0][i]  :
                 count+=1
-            #so with 10 cm difference predicted data is acceptable
+            
         print( '\n  {} / {} Accuracy : {}% '.format(count,Y.shape[1],count/Y.shape[1]*100))
 
     def predict(self,X):
@@ -172,13 +172,7 @@ class Modifiable_NN(object):
         output = self.feed_forward(X)
         return output
 
-        
-        
-class Dropout(Modifiable_NN):
-    def __init__(self, sizes, activations=None, cost_function='binary_cross_entropy', param_init_type=None, L2_regularization=None, dropout=None):
-        super().__init__(sizes, activations, cost_function, param_init_type, L2_regularization, dropout)
-    def cost(self, X, Y):
-        return super().cost(X, Y) + 10000000000
+
             
 
 
