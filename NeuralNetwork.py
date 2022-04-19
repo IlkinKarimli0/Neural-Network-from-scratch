@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 
-class Modifiable_NN(object):
+class NeuralNetwork(object):
     #initializer 
     def __init__(self,sizes, activations = None , cost_function = 'binary_cross_entropy' ,param_init_type = None,L2_regularization=None,dropout = None):
         self.sizes = sizes
